@@ -1,0 +1,196 @@
+-----------------------------------
+Nastran to Simcenter v1934.0.0.2202 Translator 
+Nastran Vendor : Simcenter 
+-----------------------------------
+Date : 24-Feb-23  
+Input File : C:\Users\danic\Documents\2 - Études\Baccalauréat\ELE8080\Bracket 
+de support\Analyse\bracket_test_sim1-solution_1.op2 
+Import Mode : Import - General 
+Data Checking : Standard 
+-----------------------------------
+
+
+*** 09:04:25 ***
+Opening op2 file... 
+...Binary file generated with a WINDOWs or LINUX type platform 
+...NX NASTRAN version stamp NX2206 detected from op2 file 
+
+*** 09:04:25 ***
+Create dictionary for information stored in op2 file... 
+...Reading datablocks 
+
+      IBULK         ICASE   
+
+...2 datablocks in op2 file have been catalogued 
+...Dictionary for op2 file compiled 
+...Case control card images from ICASE 
+...Bulk data card images from IBULK 
+
+*** 09:04:27 ***
+Parsing input file... 
+Input file parsed 
+
+*** 09:04:29 ***
+Evaluating bulk data cards... 
+Bulk data cards evaluated 
+
+*** 09:04:29 ***
+Reading Case Control information... 
+ 
+Case Control information processed 
+
+*** 09:04:29 ***
+Setting solver file unit system... 
+...Searching solver file for PARAM,UNITSYS card... 
+...PARAM,UNITSYS,MN-MM was found... 
+......Solver file unit system is set to (mN)(mm)(kg)... 
+Solver file unit system set 
+
+*** 09:04:29 ***
+Reading element data... 
+Element data processed 
+
+*** 09:04:30 ***
+Reading node and coordinate system data... 
+Node and coordinate system data processed 
+
+*** 09:04:31 ***
+Reading load data... 
+Load data processed 
+
+*** 09:04:31 ***
+Reading physical property data... 
+Physical property data processed 
+
+*** 09:04:31 ***
+Reading material data... 
+Material data processed 
+
+*** 09:04:31 ***
+Reading constraint data... 
+Constraint data processed 
+
+*** 09:04:31 ***
+Assembling case control data... 
+...Creating a fem of analysis type 'Structural' 
+...Creating a solution of analysis type 'Structural' 
+...Import selective loads as a field data 
+Case control data assembled 
+
+*** 09:04:31 ***
+Assembling case control SET data... 
+Case control SET data assembled... 
+
+*** 09:04:31 ***
+Assembling physical property data... 
+...Processing PSOLID physical properties... 
+Physical property data assembled 
+
+*** 09:04:31 ***
+Assembling node data... 
+Node data assembled 
+
+*** 09:04:31 ***
+Assembling element data... 
+...Processing CTETRA elements... 
+...Processing CONM2 elements... 
+......Importing mass as element associated data 
+...Processing RBE2 elements... 
+
+...A total of 8 mesh collectors generated with 8 meshes 
+Element data assembled 
+
+*** 09:04:32 ***
+Assembling load and constraint data... 
+...Processing GRAV loads... 
+...Processing FORCE loads... 
+...Processing SPC constraints... 
+...Processing GRID constraints... 
+Load and constraint data assembled 
+
+*** 09:04:33 ***
+Assembling material data... 
+...Processing MAT1 materials... 
+Material data assembled 
+
+*** 09:04:33 ***
+Assembling PARAM data... 
+...Skipping PARAM,UNITSYS,MN-MM... 
+...Processing PARAM cards for bulk data... 
+PARAM data assembled 
+
+*** 09:04:33 ***
+Assembling solution information... 
+...Solver set to Simcenter Nastran... 
+...Analysis type set to Structural... 
+...Solution type set to SOL SOL 101 Linear Statics - Global Constraints... 
+...Solution name set to 'bracket_test_sim1-solution_1'... 
+...Processing solver parameters... 
+...Subcase 1 assigned step name 'SUBCASE - STATICS 1'... 
+......Adopting solver set "Stat SS - Load. SID 1"... 
+......Adopting solver set "Stat SS - Load. SID 2"... 
+...Processing solution attributes... 
+......Adopting output requests... 
+...Processing global constraints... 
+......Adopting solver set "SPC SS. SID 3"... 
+...Processing global simulation objects... 
+...Processing global loads... 
+...1 Subcase generated 
+Solution information assembled 
+
+*** 09:04:33 ***
+Compacting element associated data... 
+Element associated data compacted 
+
+*** 09:04:33 ***
+---------------------
+ANALYSIS OF BULK DATA 
+---------------------
+****************************************************************
+* Card     | Cards      | Entities   | Min Id     | Max Id     *
+* Name     | Recognized | Imported   |            |            *
+****************************************************************
+* CONM2    | 5          | 5          | 80096      | 80100      *
+* CTETRA   | 80085      | 80085      | 1          | 80085      *
+* FORCE    | 1          | 1          | 1          | 1          *
+* GRAV     | 1          | 1          | 2          | 2          *
+* GRID     | 129105     | 129105     | 1          | 129105     *
+* LOAD     | 1          | 0          |            |            *
+* MAT1     | 1          | 1          | 1          | 1          *
+* PARAM    | 6          | 5          |            |            *
+* PSOLID   | 1          | 1          | 1          | 1          *
+* RBE2     | 5          | 5          | 80090      | 80095      *
+* SPC      | 2160       | 12960      | 3          | 3          *
+****************************************************************
+
+
+--------------------
+SUMMARY OF BULK DATA 
+--------------------
+Run Date : 24-Feb-23  
+Time : 09:04:33  
+ 
+Input File : C:\Users\danic\Documents\2 - Études\Baccalauréat\ELE8080\Bracket 
+de support\Analyse\bracket_test_sim1-solution_1.op2 
+ 
+*************************************************************
+* Entity             | Number     | Min Id     | Max Id     *
+*                    | Imported   |            |            *
+*************************************************************
+* Nodes              | 129105     | 1          | 129105     *
+* Restraints         | 12960      | 3          | 3          *
+* Elements           | 80095      | 1          | 80100      *
+* Physicals          | 1          | 1          | 1          *
+* Materials          | 1          | 1          | 1          *
+* Loads              | 2          | 1          | 2          *
+* Modeling Object    | 1          |            |            *
+*************************************************************
+
+>>> 0 Warnings found 
+>>> 0 Errors found 
+
+*** 09:04:33 ***
+Uploading Nastran model to Simcenter
+
+*** 09:04:49 ***
+Nastran model uploaded to Simcenter
