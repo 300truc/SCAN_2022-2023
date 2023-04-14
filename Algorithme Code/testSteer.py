@@ -2,16 +2,17 @@
 
 from IntegratedDetection import *
 
-def partialGetPower(azi, ele, power_detector, motor_arduino, antenna_socket, filename, RPM = 10, mode='somme'):
+def partialGetPower(azi, ele, power_detector, motor_arduino, antenna_socket, filename, RPM = 10, mode='somme', f = 28E9):
     motorCommand(motor_arduino, azi)
-    steer(ele, mode, antenna_socket, filename)
+    steer(ele, mode, antenna_socket, filename, f)
     power = readPower(power_detector, 15)
     print(ele, power)
     return power
 
 if __name__ == '__main__':
-    power_detector = serial.Serial('COM5')
+    power_detector = serial.Serial('COM9')
     motor_arduino = serial.Serial('COM7')
+    print("essai")
 
     #Commande de l'antenne
     RECV_TIMEOUT = 15
@@ -27,12 +28,12 @@ if __name__ == '__main__':
     except socket.error as msg:
             print('[Init_TCP_client]Exception : %s' % (msg))
 
-    a = np.linspace(-50, 10, 31)
+    a = np.linspace(-30, 30, 61)
     ps = np.zeros_like(a)
     pdi = np.zeros_like(a)
     for i, ai in enumerate(a):
-         ps[i] = partialGetPower(0, ai, power_detector, motor_arduino, TCPsocket, filename = 'AntennaControl\Antenna_control_phase_steps_1deg_resolution.txt', mode='somme')
-         pdi[i] = partialGetPower(0, ai, power_detector, motor_arduino, TCPsocket, filename = 'AntennaControl\Antenna_control_phase_steps_1deg_resolution.txt', mode = 'difference')
+         ps[i] = partialGetPower(0, ai, power_detector, motor_arduino, TCPsocket, filename = 'AntennaControl\Antenna_control_phase_steps_1deg_resolution.txt', mode='somme', f = 27.5E9)
+         pdi[i] = partialGetPower(0, ai, power_detector, motor_arduino, TCPsocket, filename = 'AntennaControl\Antenna_control_phase_steps_1deg_resolution.txt', mode = 'somme', f = 28.5E9)
 
     plt.figure()
     plt.plot(a, ps)

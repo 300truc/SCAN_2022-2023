@@ -3,8 +3,8 @@
 import numpy as np
 from scipy.interpolate import LinearNDInterpolator
 from scipy.ndimage import uniform_filter
-from getData import *
-from visualize import *
+from .getData import *
+from .visualize import *
 
 class model:    
     #Dataset when only in one steering
@@ -16,8 +16,8 @@ class model:
         self.dataset = get_points(np.array([self.A]), np.array([self.H]), np.array([self.e]), np.array([self.filteredP]))
     
     #Dataset with multiple steerings - most likely the one used
-    def build_4Ddataset(self, filenames, size = 3):
-        self.A, self.H, self.e, self.P = get_4Ddataset(filenames)
+    def build_4Ddataset(self, filenames, size = 3, mode = 'somme', f = '28.'):
+        self.A, self.H, self.e, self.P = get_4Ddataset(filenames, mode, f)
         self.filteredP = []
         for i in range(len(self.P)):
             self.filteredP.append(uniform_filter(self.P[i], size = size, mode = 'nearest'))

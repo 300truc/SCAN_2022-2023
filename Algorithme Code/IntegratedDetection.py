@@ -13,7 +13,7 @@ import time
 from scipy.optimize import minimize
 
 #System initialization
-def init(datasets_directory, COM_Power, COM_Motor, COM_compass):
+def init(datasets_directory, COM_Power, COM_Motor, COM_compass, f):
     #Detection model
     complete_model = model()
     
@@ -24,8 +24,8 @@ def init(datasets_directory, COM_Power, COM_Motor, COM_compass):
     #import os
     #files = os.listdir(datasets_directory)
     #for i, file in enumerate(files):
-    #   files[i] = datasets_directory+file
-    #complete_model.build_4Ddataset(files)
+    #  files[i] = datasets_directory+file
+    #complete_model.build_4Ddataset(files, f = f)
     #complete_model.save_dataset()
     
     #Building an interpolator for greater resolution
@@ -41,6 +41,7 @@ def init(datasets_directory, COM_Power, COM_Motor, COM_compass):
     with open('currentpos.txt', 'w') as file:
         file.write('0')
     motor_arduino = serial.Serial(COM_Motor, 115200)
+    motorCommand(motor_arduino, 0)
 
     #Initializing the antenna through the BBoard (inspired from the software given by TMYTEK through Prof. Jean-Jacques Laurin)
     RECV_TIMEOUT = 15
@@ -70,11 +71,17 @@ def motorCommand(arduino, angle_deg):
         file.write(str(current_pos))
     
 #Sending a command to the antenna (inspired from the software given by TMYTEK through Prof. Jean-Jacques Laurin)
-def steer(angle_deg, mode, antenna_socket, filename):
+def steer(angle_deg, mode, antenna_socket, filename, f = 27.5E9):
     somme, difference = Read_txt(filename)
+    lam = 3E8/f
     for i in range(len(somme)):
         if somme[i,0] == angle_deg and mode == "somme":
-            SendCmdThenWaitRSP(antenna_socket,"MODULE_CTRL_ 1,2,0,0,0,0,0,"+str(somme[i,1])+","+str(somme[i,2])+","+str(somme[i,3])+","+str(somme[i,4])+",0,0,3,5,0 \n\r",0)
+            step1 = 0
+            step = 360*0.005*np.sin(np.deg2rad(angle_deg))/lam
+            step2 = round(np.mod(step, 360)/5.625)
+            step3 = round(np.mod(2*step, 360)/5.625)
+            step4 = round(np.mod(3*step, 360)/5.625)
+            SendCmdThenWaitRSP(antenna_socket,"MODULE_CTRL_ 1,2,0,0,0,0,0,"+str(step1)+","+str(step2)+","+str(step3)+","+str(step4)+",0,0,3,5,0 \n\r",0)
             break
         if difference[i,0] == angle_deg and mode == "difference":
             SendCmdThenWaitRSP(antenna_socket,"MODULE_CTRL_ 1,2,0,0,0,0,0,"+str(difference[i,1])+","+str(difference[i,2])+","+str(difference[i,3])+","+str(difference[i,4])+",0,0,3,5,0 \n\r",0)
@@ -135,9 +142,11 @@ def initPositionAz(compass, angle_initial, motor_arduino):
     return position_sys
 
 #Integrate the motor, antenna and power detector together
-def getPower(azi, ele, power_detector, motor_arduino, antenna_socket, filename, RPM = 30):
+def getPower(azi, ele, power_detector, motor_arduino, antenna_socket, filename, RPM = 30, f = 28.0E9):
     with open('currentpos.txt', 'r') as file:
         current_pos = float(file.readline())
+        if azi > 180: azi -= 360
+        elif azi < -180: azi += 360
         incr = azi - current_pos
     motorCommand(motor_arduino, azi)
     
@@ -145,7 +154,7 @@ def getPower(azi, ele, power_detector, motor_arduino, antenna_socket, filename, 
     #While the motor is moving, take measures and send commands, but do not store these values
     start = time.time()
     while time.time() - start <= 2*abs(incr/360)/(RPM/60) + 1:
-        steer(ele, 'somme', antenna_socket, filename)
+        steer(ele, 'somme', antenna_socket, filename, f)
         power = readPower(power_detector, 30)
         
     #Printing the results for ease of debugging and information tracking

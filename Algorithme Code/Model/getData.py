@@ -22,9 +22,9 @@ def get_3Ddataset(filename):
         P[i,j] = p
     return A, H, P
 
-def get_4Ddataset(filenames):
+def get_4Ddataset(filenames, mode = 'somme', f = '28.'):
     #All the datasets must have the same azimuts and elevations
-    data_test = ReadExcel(filenames[0])
+    data_test = ReadExcel(filenames[0], f)
     
     e = []
     for filename in filenames:
@@ -56,7 +56,10 @@ def get_4Ddataset(filenames):
                     break
         Ak, Hk, Pk = get_3Ddataset(filename)
         Pd = Pk
-        P.append(Pc)
+        if mode == 'somme':
+            P.append(Pc)
+        if mode == 'difference':
+            P.append(Pd)
     return A, H, e, P
 
 def get_points(A, H, e, P):
@@ -73,7 +76,7 @@ def get_points(A, H, e, P):
     return np.array(datapoints)
 
 #Excel reading function, taken from given code by Maxime Thibault
-def ReadExcel(txt):
+def ReadExcel(txt, f = '28.'):
     header = pd.read_excel(txt, index_col=None, sheet_name='Header')
     STEP_START = header.iat[2,1]
     STEP_STOP = header.iat[2,2]
@@ -81,7 +84,7 @@ def ReadExcel(txt):
     SCAN_START = header.iat[3,1]
     SCAN_STOP = header.iat[3,2]
     SCAN_INC = header.iat[3,3]
-    data = pd.read_excel(txt, index_col=None, sheet_name='28.')
+    data = pd.read_excel(txt, index_col=None, sheet_name=f)
     angle_azimut = np.array(STEP_INC*data['Scan']+STEP_START-STEP_INC-90)
     angle_elevation = np.array(SCAN_INC*data['Rinc']+SCAN_START-SCAN_INC)
     Puissance_lue = np.array(data['Bin1Amptd'])

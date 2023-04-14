@@ -1,8 +1,37 @@
-#Unit test for the whole detection without hardware
-
-from IntegratedDetection import *
+#Gradient detection for satellite following
 
 import numpy as np
+from IntegratedDetection import *
+
+def simplex_gradient(func, x0, delta):
+    n = len(x0)
+    grad = np.zeros(n)
+    for i in range(n):
+        step = np.zeros(n)
+        step[i] = delta
+        fi = func(x0 + step)
+        fj = func(x0 - step)
+        grad[i] = (fi - fj)/(2*delta)
+    return grad
+
+def gradient_optimizer(func, x0, tol, n, tau = 0.5):
+    k = 0
+    delta = 1
+    f = func(x0)
+    while k <=n and delta > tol:
+        d = -simplex_gradient(func, x0, delta)
+        if np.linalg.norm(d) < tol:
+            return x0
+        k += 1
+        fi = func(x0 + delta*d)
+        if fi < f:
+            f = fi
+            x0 += delta*d
+            delta = delta/tau
+        else:
+            delta = delta*tau
+            
+    return x0
 
 def ArtificialInit(datasets_directory):
     #Detection model
@@ -32,16 +61,9 @@ def artificialGetPower(model_data, azi, ele, azi_shift, ele_shift):
 if __name__ == '__main__':
     complete_model = ArtificialInit(datasets_directory = "datasets/Domain/") #Initializing all components
     
-    func = lambda azi, ele: artificialGetPower(complete_model, azi, ele, -90, 10) #Function to get the power at particular position artificially
-    best_azi, best_ele, data = detect(func, [-180, -30], [180, 30], [9, 3], complete_model, tol = 10**-3) #Find the position of the system
-
-    #Plot the detection pattern (optional)
-    fig = plt.figure()
-    ax = plt.axes(projection='3d')
-    ax.scatter(data[:,0], data[:,2], data[:,3])
-    ax.set_xlabel('A [°]')
-    ax.set_ylabel('h [°]')
-    plt.show()
+    power = lambda azi, ele: artificialGetPower(complete_model, azi, ele, -90, 10) #Function to get the power at particular position artificially
+    x0 = gradient_optimizer(lambda x0: -1*power(x0[0], x0[1]), x0 = [-80, 10], tol = 0, n = float('inf')) #Find the position of the system
 
     #Print the source's position
-    print("Best azimuth = "+str(best_azi)+"\t Best elevation = "+str(best_ele))
+    print("Best azimuth = "+str(x0[0])+"\t Best elevation = "+str(x0[1]))
+    
