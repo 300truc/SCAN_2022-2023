@@ -1,6 +1,6 @@
 //////// Project SCAN ////////
 // Commande du moteur selon le mode pulse burst positioning
-// Auteur : Kevin Shegani
+// Auteur : SCAN
 // Dernière modification : 2023-04-07
 // Code inspiré de : https://github.com/Teknic-ClearPath/ClearPath-Arduino-Pulse-Burst
 //////////////////////////////

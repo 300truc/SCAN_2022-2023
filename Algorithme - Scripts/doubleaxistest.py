@@ -1,4 +1,4 @@
-#Unit test for the whole detection without hardware
+#Unit test for the whole detection without hardware with the quotient model
 
 from IntegratedDetection import *
 
@@ -60,7 +60,6 @@ def single_detect(func, x0, modelfunc, tol = 10**-3):
         k += 1
     return x0, np.array(saved_data)
 
-import time
 def artificialGetPower(model_data, azi, ele, azi_shift, ele_shift):
     power = model_data.eval([azi-azi_shift, ele_shift, ele])# + np.random.uniform(-0.25, 0.25)
     print('Azimut = '+str(azi)+'\t Elevation = '+str(ele)+'\t Power = '+str(power))

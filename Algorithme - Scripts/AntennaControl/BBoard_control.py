@@ -2,7 +2,7 @@
 """
 Created on Thu Feb  9 14:43:24 2023
 
-@author: joula
+@author: SCAN
 """
 import socket 
 import time

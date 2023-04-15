@@ -8,6 +8,7 @@ if __name__ == '__main__':
     
     start_time = time.time()
     
+    #Frequency
     f = 28E9
     fs = '28.'
     
@@ -23,13 +24,3 @@ if __name__ == '__main__':
     print("Time = "+str(time.time() - start_time))
     
     x0 = opportunisticCS(lambda x0: -1*func(x0[0], x0[1]), x0 = [best_azi, best_ele], tol = 0, neval = float('inf'))
-
-    #Plot the detection pattern (optional)
-    fig = plt.figure()
-    ax = plt.axes(projection='3d')
-    ax.scatter(data[:,0], data[:,2], data[:,3])
-    ax.set_xlabel('A [°]')
-    ax.set_ylabel('h [°]')
-    plt.show()
-
-    motorCommand(motor_arduino, 0)

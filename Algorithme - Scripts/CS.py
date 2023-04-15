@@ -24,6 +24,7 @@ def opportunisticCS(func, x0, tol = 10**-3, neval = 100, tau = 0.5):
             k += 1
             xi = x0 + delta*ei
             fi = func(xi)
+            # Opportunistic and dynamic coordinates
             if fi < func(x0):
                 x0 = xi
                 delta = np.min([delta/tau, 4])
